@@ -1,37 +1,40 @@
-
 #include <stdio.h>
 
 #define TAMANHO_TABULEIRO 10
-#define NAVIO 3 // Representa um navio no tabuleiro
-#define VAZIO 0 // Representa espaço sem navio
 
 void inicializarTabuleiro(int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO]) {
     for (int i = 0; i < TAMANHO_TABULEIRO; i++) {
         for (int j = 0; j < TAMANHO_TABULEIRO; j++) {
-            tabuleiro[i][j] = VAZIO;
+            tabuleiro[i][j] = 0; // Inicializa com 0 (área não afetada)
         }
     }
 }
 
-void posicionarNavios(int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO]) {
-    // Navio vertical na coluna 2
-    for (int i = 2; i < 5; i++) {
-        tabuleiro[i][2] = NAVIO;
+void aplicarCone(int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO]) {
+    for (int i = 5; i < 10; i++) {
+        for (int j = 10 - i; j <= i; j++) {
+            tabuleiro[i][j] = 1;
+        }
     }
+}
 
-    // Navio horizontal na linha 6
-    for (int j = 4; j < 8; j++) {
-        tabuleiro[6][j] = NAVIO;
+void aplicarOctaedro(int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO]) {
+    for (int i = 3; i <= 6; i++) {
+        for (int j = 5 - (i - 3); j <= 5 + (i - 3); j++) {
+            tabuleiro[i][j] = 1;
+        }
     }
-
-    // Navio diagonal crescente (subindo à direita)
-    for (int i = 0; i < 4; i++) {
-        tabuleiro[5 - i][4 + i] = NAVIO;
+    for (int i = 7; i <= 9; i++) {
+        for (int j = 5 - (9 - i); j <= 5 + (9 - i); j++) {
+            tabuleiro[i][j] = 1;
+        }
     }
+}
 
-    // Navio diagonal decrescente (descendo à direita)
-    for (int i = 0; i < 3; i++) {
-        tabuleiro[7 + i][2 + i] = NAVIO;
+void aplicarCruz(int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO]) {
+    for (int i = 0; i < TAMANHO_TABULEIRO; i++) {
+        tabuleiro[i][5] = 1;
+        tabuleiro[5][i] = 1;
     }
 }
 
@@ -49,9 +52,19 @@ int main() {
     int tabuleiro[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO];
 
     inicializarTabuleiro(tabuleiro);
-    posicionarNavios(tabuleiro);
+    printf("\nHabilidade: Cone\n");
+    aplicarCone(tabuleiro);
+    exibirTabuleiro(tabuleiro);
+
+    inicializarTabuleiro(tabuleiro);
+    printf("\nHabilidade: Octaedro\n");
+    aplicarOctaedro(tabuleiro);
+    exibirTabuleiro(tabuleiro);
+
+    inicializarTabuleiro(tabuleiro);
+    printf("\nHabilidade: Cruz\n");
+    aplicarCruz(tabuleiro);
     exibirTabuleiro(tabuleiro);
 
     return 0;
 }
-
